@@ -19,6 +19,7 @@
     "@trpc/server": "^10.26.0",
     "next": "^13.4.2",
     "react": "18.2.0",
+    "react-calendar": "^4.2.1",
     "react-dom": "18.2.0",
     "superjson": "1.12.2",
     "zod": "^3.21.4"
