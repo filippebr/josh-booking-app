@@ -1,4 +1,4 @@
-import Calendar from '@/components/Calendar'
+import { Calendar } from '@/components/Calendar'
 import { type NextPage } from 'next'
 import Head from 'next/head'
 

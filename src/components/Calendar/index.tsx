@@ -6,7 +6,7 @@ interface DateType {
   dateTime: Date | null
 }
 
-export function Index() {
+export function Calendar() {
   const [date, setDate] = useState<DateType>({
     justDate: null,
     dateTime: null,
