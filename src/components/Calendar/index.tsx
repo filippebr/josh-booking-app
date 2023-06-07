@@ -1,4 +1,4 @@
-import { add } from 'date-fns'
+import { add, format } from 'date-fns'
 import { useState } from 'react'
 import ReactCalendar from 'react-calendar'
 
@@ -12,6 +12,8 @@ export function Calendar() {
     justDate: null,
     dateTime: null,
   })
+
+  console.log(date.dateTime)
 
   const getTimes = () => {
     if (!date.justDate) return
@@ -37,7 +39,14 @@ export function Calendar() {
       {date.justDate ? (
         <div className="flex gap-4 ">
           {times?.map((time, i) => (
-            <div key={`time-${i}`}></div>
+            <div key={`time-${i}`} className="rounded-sm bg-gray-100 p-2 ">
+              <button
+                type="button"
+                onClick={() => setDate((prev) => ({ ...prev, dateTime: time }))}
+              >
+                {format(time, 'kk:mm')}
+              </button>
+            </div>
           ))}
         </div>
       ) : (
