@@ -1,9 +1,12 @@
-import { publicProcedure } from '@/server/api/trpc'
+import { MAX_FILE_SIZE } from '@/constants/config'
+import { getJwtSecretKey } from '@/lib/auth'
+import { s3 } from '@/lib/s3'
+import { adminProcedure, publicProcedure, router } from '@/server/trpc'
+import { TRPCError } from '@trpc/server'
 import cookie from 'cookie'
 import { SignJWT } from 'jose'
 import { nanoid } from 'nanoid'
 import { z } from 'zod'
-import { router } from '../../trpc'
 
 export const adminRouter = router({
   login: publicProcedure
@@ -30,6 +33,62 @@ export const adminRouter = router({
             secure: process.env.NODE_ENV === 'production',
           }),
         )
+
+        return { success: true }
       }
+
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'Invalid email or password',
+      })
     }),
+
+  createPresignedUrl: adminProcedure
+    .input(z.object({ fileType: z.string() }))
+    .mutation(async ({ input }) => {
+      const id = nanoid()
+      const ex = input.fileType.split('/')[1]
+      const key = `${id}.${ex}`
+
+      const { url, fields } = (await new Promise((resolve, reject) => {
+        s3.createPresignedPost(
+          {
+            Bucket: 'youtube-booking-software',
+            Fields: { key },
+            Expires: 60,
+            Conditions: [
+              ['content-length-range', 0, MAX_FILE_SIZE],
+              ['starts-with', '$Content-Type', 'image/'],
+            ],
+          },
+          (err, signed) => {
+            if (err) return reject(err)
+            resolve(signed)
+          },
+        )
+      })) as any as { url: string; fields: any }
+
+      return { url, fields, key }
+    }),
+
+  addMenuItem: adminProcedure
+    .input(
+      z.object({
+        imageKey: z.string(),
+        name: z.string(),
+        price: z.number(),
+        categories: z.array(
+          z.union([
+            z.literal('breakfast'),
+            z.literal('lunch'),
+            z.literal('dinner'),
+          ]),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {}),
+
+  deleteMenuItem: adminProcedure
+    .input(z.object({ imageKey: z.string(), id: z.string() }))
+    .mutation(async ({ input, ctx }) => {}),
 })
