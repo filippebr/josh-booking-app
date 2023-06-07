@@ -1,3 +1,8 @@
+import {
+  INTERVAL,
+  STORE_CLOSING_TIME,
+  STORE_OPENING_TIME,
+} from '@/constants/config'
 import { add, format } from 'date-fns'
 import { useState } from 'react'
 import ReactCalendar from 'react-calendar'
@@ -20,9 +25,9 @@ export function Calendar() {
 
     const { justDate } = date
 
-    const beginning = add(justDate, { hours: 9 })
-    const end = add(justDate, { hours: 17 })
-    const interval = 30 // in minutes
+    const beginning = add(justDate, { hours: STORE_OPENING_TIME })
+    const end = add(justDate, { hours: STORE_CLOSING_TIME })
+    const interval = INTERVAL // in minutes
 
     const times = []
     for (let i = beginning; i <= end; i = add(i, { minutes: interval })) {
