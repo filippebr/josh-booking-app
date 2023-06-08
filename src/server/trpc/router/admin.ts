@@ -11,9 +11,10 @@ import { z } from 'zod'
 export const adminRouter = router({
   login: publicProcedure
     .input(z.object({ email: z.string().email(), password: z.string() }))
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ ctx, input }) => {
       const { res } = ctx
       const { email, password } = input
+
       if (
         email === process.env.ADMIN_EMAIL &&
         password === process.env.ADMIN_PASSWORD

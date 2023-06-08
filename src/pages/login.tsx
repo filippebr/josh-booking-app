@@ -1,3 +1,4 @@
+import { trpc } from '@/utils/trpc'
 import Image from 'next/image'
 import { ChangeEvent, useState } from 'react'
 import { HiLockClosed } from 'react-icons/hi'
@@ -15,6 +16,8 @@ export function Login() {
 
     setInput((prev) => ({ ...prev, [name]: value }))
   }
+
+  const { mutate: login, isError } = trpc.admin.login.useMutation()
 
   return (
     <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
@@ -42,7 +45,7 @@ export function Login() {
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="-space-y-px rounded-md shadow-sm">
             <p className="pb-1 text-sm text-red-600">
-              {error && 'Invalid login credentials'}
+              {isError && 'Invalid login credentials'}
             </p>
             <div>
               <label htmlFor="email-address" className="sr-only">
