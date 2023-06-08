@@ -1,4 +1,6 @@
 function Spinner() {
+  //
+
   return (
     <svg
       className="spinner"

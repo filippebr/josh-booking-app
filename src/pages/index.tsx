@@ -24,7 +24,8 @@ const Home: NextPage = () => {
       <main>
         {!date.dateTime && <Calendar setDate={setDate} date={date} />}
         {date.dateTime && true ? (
-          <Menu />
+          // <Menu />
+          <h1>Menu</h1>
         ) : (
           <div className="flex h-screen items-center justify-center">
             <Spinner />
