@@ -1,6 +1,7 @@
 'use client'
 
 import { Calendar } from '@/components/Calendar'
+import Menu from '@/components/Menu'
 import Spinner from '@/components/Spinner'
 import { DateTime } from '@/utils/types/types'
 import { type NextPage } from 'next'
@@ -24,8 +25,8 @@ const Home: NextPage = () => {
       <main>
         {!date.dateTime && <Calendar setDate={setDate} date={date} />}
         {date.dateTime && true ? (
-          // <Menu />
-          <h1>Menu</h1>
+          // <h1>Menu</h1>
+          <Menu />
         ) : (
           <div className="flex h-screen items-center justify-center">
             <Spinner />
