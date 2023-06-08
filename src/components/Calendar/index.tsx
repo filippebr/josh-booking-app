@@ -3,7 +3,7 @@ import {
   STORE_CLOSING_TIME,
   STORE_OPENING_TIME,
 } from '@/constants/config'
-import { DateTime } from '@/utils/types'
+import { type DateTime } from '@/utils/types/types'
 import { add, format } from 'date-fns'
 import { Dispatch, SetStateAction } from 'react'
 import ReactCalendar from 'react-calendar'
