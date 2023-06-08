@@ -1,8 +1,17 @@
+'use client'
+
 import { Calendar } from '@/components/Calendar'
+import { DateTime } from '@/utils/types'
 import { type NextPage } from 'next'
 import Head from 'next/head'
+import { useState } from 'react'
 
 const Home: NextPage = () => {
+  const [date, setDate] = useState<DateTime>({
+    justDate: null,
+    dateTime: null,
+  })
+
   return (
     <>
       <Head>
@@ -12,7 +21,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <Calendar />
+        <Calendar setDate={setDate} date={date} />
       </main>
     </>
   )

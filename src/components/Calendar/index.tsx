@@ -3,23 +3,22 @@ import {
   STORE_CLOSING_TIME,
   STORE_OPENING_TIME,
 } from '@/constants/config'
+import { DateTime } from '@/utils/types'
 import { add, format } from 'date-fns'
-import { useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import ReactCalendar from 'react-calendar'
+
+interface indexProps {
+  date: DateTime
+  setDate: Dispatch<SetStateAction<DateTime>>
+}
 
 interface DateType {
   justDate: Date | null
   dateTime: Date | null
 }
 
-export function Calendar() {
-  const [date, setDate] = useState<DateType>({
-    justDate: null,
-    dateTime: null,
-  })
-
-  console.log(date.dateTime)
-
+export function Calendar({ setDate, date }: indexProps) {
   const getTimes = () => {
     if (!date.justDate) return
 

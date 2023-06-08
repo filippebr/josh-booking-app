@@ -1,5 +1,5 @@
 import { getJwtSecretKey } from '@/lib/auth'
-import { publicProcedure, router } from '@/server/trpc'
+import { adminProcedure, publicProcedure, router } from '@/server/trpc'
 import { TRPCError } from '@trpc/server'
 import cookie from 'cookie'
 import { SignJWT } from 'jose'
@@ -41,6 +41,10 @@ export const adminRouter = router({
         message: 'Invalid email or password',
       })
     }),
+
+  sensitive: adminProcedure.mutation(() => {
+    return 'sensitive'
+  }),
 
   // createPresignedUrl: adminProcedure
   //   .input(z.object({ fileType: z.string() }))

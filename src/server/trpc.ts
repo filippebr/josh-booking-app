@@ -29,6 +29,7 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid user token' })
   }
 
+  // user is authenticated as admin
   return next()
 })
 
