@@ -5,7 +5,7 @@ import { HiLockClosed } from 'react-icons/hi'
 
 interface LoginProps {}
 
-export function Login() {
+export default function Login() {
   const router = useRouter()
 
   const [input, setInput] = useState({
@@ -138,5 +138,3 @@ export function Login() {
     </div>
   )
 }
-
-export default Login

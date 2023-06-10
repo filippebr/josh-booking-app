@@ -3,12 +3,11 @@
 import { Calendar } from '@/components/Calendar'
 import Menu from '@/components/Menu'
 import Spinner from '@/components/Spinner'
-import { DateTime } from '@/utils/types/types'
-import { type NextPage } from 'next'
+import { type DateTime } from '@/utils/types/types'
 import Head from 'next/head'
 import { useState } from 'react'
 
-const Home: NextPage = () => {
+export default function Home() {
   const [date, setDate] = useState<DateTime>({
     justDate: null,
     dateTime: null,
@@ -36,5 +35,3 @@ const Home: NextPage = () => {
     </>
   )
 }
-
-export default Home
