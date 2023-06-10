@@ -1,8 +1,25 @@
+'use client'
 import Image from 'next/image'
 
 interface menuProps {}
 
+type Input = {
+  name: string
+  price: number
+  categories: MultiValue<{ value: string; label: string }>
+  file: undefined | File
+}
+
+const initialInput = {
+  name: '',
+  price: 0,
+  categories: [],
+  file: undefined,
+}
+
 export default function Menu() {
+  const [input, setInput] = useState<Input>(initialInput)
+
   return (
     <>
       <div>
