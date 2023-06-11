@@ -1,5 +1,9 @@
 'use client'
+import { selectOptions } from '@/utils/helpers'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { InputActionMeta } from 'react-select'
+import Select from 'react-select/dist/declarations/src/Select'
 
 interface menuProps {}
 
@@ -19,6 +23,18 @@ const initialInput = {
 
 export default function Menu() {
   const [input, setInput] = useState<Input>(initialInput)
+  const [preview, setPreview] = useState<string>('')
+
+  useEffect(() => {
+    // create the preview
+    if (!input.file) return
+
+    const objectUrl = URL.createObjectURL(input.file)
+    setPreview(objectUrl)
+
+    // clean up the preview
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [input.file])
 
   return (
     <>
@@ -29,7 +45,9 @@ export default function Menu() {
             className="h-12 rounded-sm border-none bg-gray-200"
             type="text"
             placeholder="name"
-            onChange={handleTextChange}
+            onChange={(e) =>
+              setInput((prev) => ({ ...prev, name: e.target.value }))
+            }
             value={input.name}
           />
 
@@ -44,10 +62,23 @@ export default function Menu() {
             value={input.price}
           />
 
-          <DynamicSelect
+          <Select
             value={input.categories}
             onChange={(e) => setInput((prev) => ({ ...prev, categories: e }))}
             className="h-12"
+            options={selectOptions}
+            onInputChange={function (
+              newValue: string,
+              actionMeta: InputActionMeta,
+            ): void {
+              throw new Error('Function not implemented.')
+            }}
+            onMenuOpen={function (): void {
+              throw new Error('Function not implemented.')
+            }}
+            onMenuClose={function (): void {
+              throw new Error('Function not implemented.')
+            }}
           />
 
           <label
