@@ -1,8 +1,9 @@
 'use client'
+import { MAX_FILE_SIZE } from '@/constants/config'
 import { selectOptions } from '@/utils/helpers'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MultiValue } from 'react-select'
 
 const DynamicSelect = dynamic(() => import('react-select'), { ssr: false })
@@ -26,6 +27,7 @@ const initialInput = {
 export default function Menu() {
   const [input, setInput] = useState<Input>(initialInput)
   const [preview, setPreview] = useState<string>('')
+  const [error, setError] = useState<string>('')
 
   useEffect(() => {
     // create the preview
@@ -37,6 +39,14 @@ export default function Menu() {
     // clean up the preview
     return () => URL.revokeObjectURL(objectUrl)
   }, [input.file])
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.[0]) return setError('No file selected')
+
+    if (e.target.files[0].size > MAX_FILE_SIZE)
+      return setError('File size is too big')
+    setInput((prev) => ({ ...prev, file: e.target.files![0] }))
+  }
 
   return (
     <>
@@ -66,7 +76,12 @@ export default function Menu() {
 
           <DynamicSelect
             value={input.categories}
-            onChange={(e) => setInput((prev) => ({ ...prev, categories: e }))}
+            onChange={(e) =>
+              setInput((prev) => ({
+                ...prev,
+                categories: e as MultiValue<{ value: string; label: string }>,
+              }))
+            }
             isMulti
             className="h-12"
             options={selectOptions}
