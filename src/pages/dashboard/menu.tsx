@@ -1,9 +1,11 @@
 'use client'
 import { selectOptions } from '@/utils/helpers'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { InputActionMeta } from 'react-select'
-import Select from 'react-select/dist/declarations/src/Select'
+import { MultiValue } from 'react-select'
+
+const DynamicSelect = dynamic(() => import('react-select'), { ssr: false })
 
 interface menuProps {}
 
@@ -62,23 +64,12 @@ export default function Menu() {
             value={input.price}
           />
 
-          <Select
+          <DynamicSelect
             value={input.categories}
             onChange={(e) => setInput((prev) => ({ ...prev, categories: e }))}
+            isMulti
             className="h-12"
             options={selectOptions}
-            onInputChange={function (
-              newValue: string,
-              actionMeta: InputActionMeta,
-            ): void {
-              throw new Error('Function not implemented.')
-            }}
-            onMenuOpen={function (): void {
-              throw new Error('Function not implemented.')
-            }}
-            onMenuClose={function (): void {
-              throw new Error('Function not implemented.')
-            }}
           />
 
           <label
