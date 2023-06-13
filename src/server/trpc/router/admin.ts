@@ -1,6 +1,7 @@
 import { getJwtSecretKey } from '@/lib/auth'
 import { adminProcedure, publicProcedure, router } from '@/server/trpc'
 import { TRPCError } from '@trpc/server'
+import cloudinary from 'cloudinary'
 import cookie from 'cookie'
 import { SignJWT } from 'jose'
 import { nanoid } from 'nanoid'
@@ -42,9 +43,62 @@ export const adminRouter = router({
       })
     }),
 
-  sensitive: adminProcedure.mutation(() => {
-    return 'sensitive'
-  }),
+  createPresignedUrl: adminProcedure
+    .input(z.object({ fileType: z.string() }))
+    .mutation(async ({ input }) => {
+      const id = nanoid()
+      const ex = input.fileType.split('/')[1]
+      const key = `${id}.${ex}`
+
+      const uploadOptions = {
+        public_id: key,
+        folder: 'youtube-booking-software',
+        eager: {
+          format: 'jpg',
+          transformation: [{ width: 500, height: 500, crop: 'limit' }],
+        },
+        resource_type: 'auto',
+        eager_async: true,
+        tags: ['youtube-booking-software'],
+      }
+
+      interface CloudinaryConfig {
+        cloud_name: string
+        api_key: string
+        api_secret: string
+      }
+
+      const cloudinaryConfig: CloudinaryConfig = {
+        cloud_name: process.env.CLOUD_NAME || '',
+        api_key: process.env.CLOUD_KEY || '',
+        api_secret: process.env.CLOUD_SECRET || '',
+      }
+
+      cloudinary.v2.config(cloudinaryConfig)
+
+      const { signature, payload } = cloudinary.v2.utils.sign_request(
+        uploadOptions,
+        process.env.CLOUD_SECRET ? cloudinaryConfig : undefined,
+      )
+
+      const url = cloudinary.v2.utils.api_url('upload', {
+        api_key: process.env.CLOUD_KEY,
+        signature,
+      })
+
+      const fields = {
+        ...uploadOptions,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        signature,
+        payload,
+      }
+
+      return { url, fields, key }
+    }),
+
+  // sensitive: adminProcedure.mutation(() => {
+  //   return 'sensitive'
+  // }),
 
   // createPresignedUrl: adminProcedure
   //   .input(z.object({ fileType: z.string() }))

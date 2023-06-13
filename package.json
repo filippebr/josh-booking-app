@@ -18,6 +18,7 @@
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.29.1",
     "aws-sdk": "^2.1393.0",
+    "cloudinary": "^1.37.1",
     "cookie": "^0.5.0",
     "date-fns": "^2.30.0",
     "jose": "^4.14.4",
