@@ -145,6 +145,29 @@ export const adminRouter = router({
       return menuItem
     }),
 
+  deleteMenuItem: adminProcedure
+    .input(z.object({ imageKey: z.string(), id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      // Delete the image from cloudinary
+      const { id, imageKey } = input
+      const folder = 'booking-application'
+
+      const fullPublicId = `${folder}/${imageKey}`
+
+      await cloudinary.v2.uploader.destroy(
+        fullPublicId,
+        function (error, result) {
+          console.log(result, error)
+        },
+      )
+
+      const menuItem = await ctx.prisma.menuItem.delete({ where: { id } })
+
+      return menuItem
+
+      // Delete the image from database
+    }),
+
   // sensitive: adminProcedure.mutation(() => {
   //   return 'sensitive'
   // }),
