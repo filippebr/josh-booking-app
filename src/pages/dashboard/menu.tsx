@@ -2,6 +2,7 @@
 import { MAX_FILE_SIZE } from '@/constants/config'
 import { selectOptions } from '@/utils/helpers'
 import { trpc } from '@/utils/trpc'
+import { Categories } from '@/utils/types/types'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
