@@ -50,18 +50,6 @@ export const adminRouter = router({
       const ex = input.fileType.split('/')[1]
       const key = `${id}.${ex}`
 
-      const uploadOptions = {
-        public_id: key,
-        folder: 'youtube-booking-software',
-        eager: {
-          format: 'jpg',
-          transformation: [{ width: 500, height: 500, crop: 'limit' }],
-        },
-        resource_type: 'auto',
-        eager_async: true,
-        tags: ['youtube-booking-software'],
-      }
-
       interface CloudinaryConfig {
         cloud_name: string
         api_key: string
@@ -75,6 +63,29 @@ export const adminRouter = router({
       }
 
       cloudinary.v2.config(cloudinaryConfig)
+
+      const folder = 'booking-application'
+      const preview = 'my_preview'
+
+      const uploadOptions = {
+        public_id: key,
+        preview,
+        folder,
+        eager: {
+          format: 'jpg',
+          transformation: [{ width: 500, height: 500, crop: 'limit' }],
+        },
+        resource_type: 'auto',
+        eager_async: true,
+        tags: ['booking-software'],
+      }
+
+      // const cloudinaryUploadImg = async (cloudPath: string) => {
+      //   return await cloudinary.v2.uploader.upload(cloudPath, {
+      //     folder,
+      //     preview,
+      //   })
+      // }
 
       const { signature, payload } = cloudinary.v2.utils.sign_request(
         uploadOptions,
@@ -93,7 +104,45 @@ export const adminRouter = router({
         payload,
       }
 
+      console.log('url, fields, key: ', { url, fields, key })
+
       return { url, fields, key }
+    }),
+
+  addMenuItem: adminProcedure
+    .input(
+      z.object({
+        imageKey: z.string(),
+        name: z.string(),
+        price: z.number(),
+        categories: z.array(
+          z.union([
+            z.literal('breakfast'),
+            z.literal('lunch'),
+            z.literal('dinner'),
+          ]),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { name, price, imageKey, categories } = input
+
+      const categoryInputs = categories.map((categoryName) => ({
+        name: categoryName,
+      }))
+
+      const menuItem = await ctx.prisma.menuItem.create({
+        data: {
+          name,
+          price,
+          categories: {
+            create: categoryInputs,
+          },
+          imageKey,
+        },
+      })
+
+      return menuItem
     }),
 
   // sensitive: adminProcedure.mutation(() => {
@@ -127,23 +176,6 @@ export const adminRouter = router({
 
   //     return { url, fields, key }
   //   }),
-
-  // addMenuItem: adminProcedure
-  //   .input(
-  //     z.object({
-  //       imageKey: z.string(),
-  //       name: z.string(),
-  //       price: z.number(),
-  //       categories: z.array(
-  //         z.union([
-  //           z.literal('breakfast'),
-  //           z.literal('lunch'),
-  //           z.literal('dinner'),
-  //         ]),
-  //       ),
-  //     }),
-  //   )
-  //   .mutation(async ({ ctx, input }) => {}),
 
   // deleteMenuItem: adminProcedure
   //   .input(z.object({ imageKey: z.string(), id: z.string() }))
