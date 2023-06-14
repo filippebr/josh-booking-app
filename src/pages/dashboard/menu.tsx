@@ -35,6 +35,7 @@ export default function Menu() {
   const { mutateAsync: createPresignedUrl } =
     trpc.admin.createPresignedUrl.useMutation()
   const { mutateAsync: addItem } = trpc.admin.addMenuItem.useMutation()
+  const { data: menuItems, refetch } = trpc.menu.getMenuItems.useQuery()
 
   useEffect(() => {
     // create the preview
@@ -97,6 +98,11 @@ export default function Menu() {
       ),
       price: input.price,
     })
+
+    refetch()
+
+    // Reset input
+    setInput(initialInput)
   }
 
   return (

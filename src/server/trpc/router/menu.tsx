@@ -1,6 +1,10 @@
 import { s3 } from '@/lib/s3'
 import { publicProcedure, router } from '@/server/trpc'
 
+// sleep
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms))
+
 export const menuRouter = router({
   getMenuItems: publicProcedure.query(async ({ ctx }) => {
     const menuItems = await ctx.prisma.menuItem.findMany()
@@ -17,5 +21,12 @@ export const menuRouter = router({
     )
 
     return withUrls
+  }),
+
+  checkMenuStatus: publicProcedure.mutation(async () => {
+    // Handle menu checking logic
+    await sleep(1000)
+
+    return { success: true }
   }),
 })
