@@ -18,6 +18,8 @@ const config = {
     locales: ['en'],
     defaultLocale: 'en',
   },
-  domains: ['res.cloudinary.com'],
+  images: {
+    domains: ['res.cloudinary.com'],
+  },
 }
 export default config
