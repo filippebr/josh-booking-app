@@ -10,8 +10,6 @@ import { MultiValue } from 'react-select'
 
 const DynamicSelect = dynamic(() => import('react-select'), { ssr: false })
 
-interface menuProps {}
-
 type Input = {
   name: string
   price: number
@@ -203,8 +201,9 @@ export default function Menu() {
                 <button
                   onClick={() => handleDelete(menuItem.imageKey, menuItem.id)}
                   className="text-xs text-red-500"
+                >
                   delete
-                ></button>
+                </button>
               </div>
             ))}
           </div>
