@@ -13,11 +13,6 @@ interface indexProps {
   setDate: Dispatch<SetStateAction<DateTime>>
 }
 
-interface DateType {
-  justDate: Date | null
-  dateTime: Date | null
-}
-
 export function Calendar({ setDate, date }: indexProps) {
   const getTimes = () => {
     if (!date.justDate) return
