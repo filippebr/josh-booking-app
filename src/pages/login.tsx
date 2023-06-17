@@ -3,8 +3,6 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, useState } from 'react'
 import { HiLockClosed } from 'react-icons/hi'
 
-interface LoginProps {}
-
 export default function Login() {
   const router = useRouter()
 
